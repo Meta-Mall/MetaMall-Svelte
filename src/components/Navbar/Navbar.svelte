@@ -1,13 +1,8 @@
 <script>
 	import {
 		Drawer,
-		Button,
 		CloseButton,
 		Sidebar,
-		SidebarBrand,
-		SidebarCta,
-		SidebarDropdownItem,
-		SidebarDropdownWrapper,
 		SidebarGroup,
 		SidebarItem,
 		SidebarWrapper
