@@ -1,0 +1,14 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, span, p, a, li, ul, ol, blockquote, pre, code, input, textarea, select, button, label, table, th, td, form, fieldset, legend, dl, dt, dd, figure, figcaption, address, hr, img, video, audio, iframe, embed, object, canvas, svg, math, details, summary, menu, menuitem, nav, section, article, header, footer, main, aside, hgroup, div {
+    margin: 0;
+    padding: 0;
+}
