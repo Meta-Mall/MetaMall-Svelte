@@ -1,6 +1,6 @@
 <script>
 	import '../app.postcss';
-	import Navbar from '../components/Navbar/Navbar.svelte';
+	import Navbar from '../components/UI/Navbar.svelte';
 </script>
 
 <div>
