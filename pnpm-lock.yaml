@@ -10,6 +10,7 @@ specifiers:
   '@smui/form-field': 7.0.0-beta.0
   '@smui/icon-button': 7.0.0-beta.0
   '@smui/list': 7.0.0-beta.0
+  '@smui/menu-surface': 7.0.0-beta.0
   '@smui/snackbar': 7.0.0-beta.0
   '@smui/textfield': 7.0.0-beta.0
   '@smui/top-app-bar': 7.0.0-beta.0
@@ -38,6 +39,7 @@ devDependencies:
   '@smui/form-field': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/icon-button': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/list': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+  '@smui/menu-surface': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/snackbar': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/textfield': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/top-app-bar': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
@@ -1146,6 +1148,19 @@ packages:
       tslib: 2.5.0
     dev: true
 
+  /@material/menu-surface/14.0.0:
+    resolution: {integrity: sha512-wRz3UCrhJ4kRrijJEbvIPRa0mqA5qkQmKXjBH4Xu1ApedZruP+OM3Qb2Bj4XugCA3eCXpiohg+gdyTAX3dVQyw==}
+    dependencies:
+      '@material/animation': 14.0.0
+      '@material/base': 14.0.0
+      '@material/elevation': 14.0.0
+      '@material/feature-targeting': 14.0.0
+      '@material/rtl': 14.0.0
+      '@material/shape': 14.0.0
+      '@material/theme': 14.0.0
+      tslib: 2.5.0
+    dev: true
+
   /@material/notched-outline/14.0.0:
     resolution: {integrity: sha512-6S58DlWmhCDr4RQF2RuwqANxlmLdHtWy2mF4JQLD9WOiCg4qY9eCQnMXu3Tbhr7f/nOZ0vzc7AtA3vfJoZmCSw==}
     dependencies:
@@ -1483,6 +1498,18 @@ packages:
       '@material/list': 14.0.0
       '@smui/common': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
       '@smui/ripple': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+      svelte2tsx: 0.5.23_4x7phaipmicbaooxtnresslofa
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/menu-surface/7.0.0-beta.0_4x7phaipmicbaooxtnresslofa:
+    resolution: {integrity: sha512-maqzpPTDn4GbvCzCH8Zrb7tSSRtVqJjdsDbujP5YplO8nvzEo3OdjokZcBrbs2QMcw18AIofjA7DwAblcnFNJQ==}
+    dependencies:
+      '@material/animation': 14.0.0
+      '@material/menu-surface': 14.0.0
+      '@smui/common': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
       svelte2tsx: 0.5.23_4x7phaipmicbaooxtnresslofa
     transitivePeerDependencies:
       - svelte

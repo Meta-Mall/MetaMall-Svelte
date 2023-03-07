@@ -12,3 +12,15 @@ h1, h2, h3, h4, h5, h6, span, p, a, li, ul, ol, blockquote, pre, code, input, te
     margin: 0;
     padding: 0;
 }
+
+.snackbar-success {
+    background-color: green;
+}
+
+.snackbar-warn {
+background-color: orange;
+}
+
+.snackbar-error {
+    background-color: red;
+}
