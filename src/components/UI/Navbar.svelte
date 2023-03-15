@@ -6,8 +6,10 @@
     import Button, { Label } from "@smui/button";
     import MenuSurface from '@smui/menu-surface';
     import Textfield from '@smui/textfield';
+    
     import { firebaseGoogleLogin, showSnackbar } from "../../utils";
     import { store } from "../../stores/store";
+    import { blockchain, login as loginWithWallet } from '../../blockchain'
 
     let menuOpen = false;
     let accountPopup;
@@ -24,11 +26,18 @@
         try {
             const result = await firebaseGoogleLogin($store.firebase)
             $store.user = result.user
+            const user = {
+                userName: result.user.displayName,
+                email: result.user.email,
+                photoURL: result.user.photoURL,
+            }
+            $store.unityInstance.callFunction('Player', 'UserLoggedIn', JSON.stringify({user: JSON.stringify(user), type: 'customer'}))
         }
         catch (e) {
-            showSnackbar(e.message, 'error')
+            showSnackbar(e.toString(), 'error')
         }
     }
+    $: console.log($blockchain)
 
     export let activeTab = "MetaMall";
     export const toggleMenu = () => (menuOpen = !menuOpen);
@@ -114,6 +123,9 @@
             <Textfield value='' type="email" label="To" style="min-width: 250px;" input$autocomplete="email" />
             <Button style="margin-top: 1em;" on:click={loginWithGoogle}>
                 Login
+            </Button>
+            <Button style="margin-top: 1em;" on:click={loginWithWallet}>
+                Ethereum Login
             </Button>
         </div>
       </MenuSurface>

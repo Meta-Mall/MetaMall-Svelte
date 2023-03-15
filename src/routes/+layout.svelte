@@ -8,10 +8,20 @@
     import { store } from "../stores/store";
     import { initializeApp } from "firebase/app";
     import firebaseConfig from '../firebaseConfig.js'
+    import { loadContract, login } from "../blockchain";
 
 	let activeTab;
     onMount(async () => {
         $store.firebase = initializeApp(firebaseConfig);
+        loadContract()
+
+        const blockchainReload = async () => {
+            await loadContract()
+            login()
+        }
+
+        window.ethereum.on("chainChanged", blockchainReload);
+        window.ethereum.on("accountsChanged", blockchainReload);
     })
 </script>
 
