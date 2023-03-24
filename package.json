@@ -7,13 +7,14 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"lint": "eslint .",
-		"prepare": "npm run smui-theme-light && npm run smui-theme-dark",
+		"prepare": "pnpm run smui-theme-light && pnpm run smui-theme-dark",
 		"smui-theme-light": "smui-theme compile static/smui.css -i src/theme -i ./node_modules",
 		"smui-theme-dark": "smui-theme compile static/smui-dark.css -i src/theme/dark -i ./node_modules"
 	},
 	"devDependencies": {
 		"@mdi/js": "^7.1.96",
 		"@smui/button": "7.0.0-beta.0",
+		"@smui/card": "7.0.0-beta.0",
 		"@smui/circular-progress": "7.0.0-beta.0",
 		"@smui/dialog": "7.0.0-beta.0",
 		"@smui/drawer": "7.0.0-beta.0",

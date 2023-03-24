@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@mdi/js': ^7.1.96
   '@smui/button': 7.0.0-beta.0
+  '@smui/card': 7.0.0-beta.0
   '@smui/circular-progress': 7.0.0-beta.0
   '@smui/dialog': 7.0.0-beta.0
   '@smui/drawer': 7.0.0-beta.0
@@ -38,6 +39,7 @@ dependencies:
 devDependencies:
   '@mdi/js': 7.1.96
   '@smui/button': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+  '@smui/card': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/circular-progress': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/dialog': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
   '@smui/drawer': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
@@ -1036,6 +1038,19 @@ packages:
       tslib: 2.5.0
     dev: true
 
+  /@material/card/14.0.0:
+    resolution: {integrity: sha512-SnpYWUrCb92meGYLXV7qa/k40gnHR6rPki6A1wz0OAyG2twY48f0HLscAqxBLvbbm1LuRaqjz0RLKGH3VzxZHw==}
+    dependencies:
+      '@material/dom': 14.0.0
+      '@material/elevation': 14.0.0
+      '@material/feature-targeting': 14.0.0
+      '@material/ripple': 14.0.0
+      '@material/rtl': 14.0.0
+      '@material/shape': 14.0.0
+      '@material/theme': 14.0.0
+      tslib: 2.5.0
+    dev: true
+
   /@material/circular-progress/14.0.0:
     resolution: {integrity: sha512-7EdkP6ty54g6qs6zzlsw29vWlUyrcSWr9b4pGGx4D/iNJww+eyxXZ07iWoNOr4uLgguauWEft2axpQiFCwFD0g==}
     dependencies:
@@ -1449,6 +1464,20 @@ packages:
       '@material/ripple': 14.0.0
       '@material/theme': 14.0.0
       '@smui/common': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+      '@smui/ripple': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+      svelte2tsx: 0.5.23_4x7phaipmicbaooxtnresslofa
+    transitivePeerDependencies:
+      - svelte
+      - typescript
+    dev: true
+
+  /@smui/card/7.0.0-beta.0_4x7phaipmicbaooxtnresslofa:
+    resolution: {integrity: sha512-IxcmeDgfilsKsGbjHo1mGhHlw4jRksD7LudghWiSCvbKVOvg0ukAD2nOzNzXCa5LJEuODjHjoEC0GCRDTINLtg==}
+    dependencies:
+      '@material/card': 14.0.0
+      '@smui/button': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+      '@smui/common': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
+      '@smui/icon-button': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
       '@smui/ripple': 7.0.0-beta.0_4x7phaipmicbaooxtnresslofa
       svelte2tsx: 0.5.23_4x7phaipmicbaooxtnresslofa
     transitivePeerDependencies:

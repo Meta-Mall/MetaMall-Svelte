@@ -129,8 +129,8 @@
     </Dialog>
 </div>
 
-<Button on:click={() => (open = true)}>
-    <Label>Open Dialog</Label>
+<Button variant="raised" on:click={() => (open = true)}>
+    <Label>Add Product</Label>
 </Button>
 
 <style>

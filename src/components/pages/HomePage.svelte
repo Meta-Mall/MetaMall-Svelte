@@ -28,7 +28,6 @@
 	<meta name="description" content="Page description" />
 </svelte:head>
 
-Svelte builtin Global checking
 <span>
 	user obj in store: {$store.user ? JSON.stringify($store.user) : 'is null'}
 </span>
@@ -39,11 +38,13 @@ Svelte builtin Global checking
 </div>
 <button on:click={() => { $store.user = {name: "Asad"}}}>change whole obj</button>
 <button on:click={() => { $store.user.name = $store.user.name === "Faiqah" ? "Asad" : "Faiqah"}}>change nested obj</button>
-<UnityPlayer bind:this={$store.unityInstance} config={unityConfig} playerCSS="metamall-player" />
-
+<!--<UnityPlayer bind:this={$store.unityInstance} config={unityConfig} playerCSS="metamall-player" />
+-->
 <style>
     :global(.metamall-player) {
         width: 95%;
         margin: 0 auto;
     }
+
+	
 </style>
