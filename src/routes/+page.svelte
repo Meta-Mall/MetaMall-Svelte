@@ -22,7 +22,9 @@
     <img class="carousel-img" {src} alt="carousel" />
 {/each}
 <div class="carousel-btn">
-    <IconButton class="material-icons" on:click={next}>arrow_forward_ios</IconButton>
+    <IconButton class="material-icons" on:click={next}
+        >arrow_forward_ios</IconButton
+    >
 </div>
 
 <div class="heading">About</div>
@@ -39,14 +41,23 @@
 <div class="heading">Features</div>
 
 <div class="card-container">
-    <div class="card">You can buy virtual land</div>
+    <div class="card">
+        You can buy virtual land where you will have the authority making this
+        mall decentralized
+    </div>
 
     <div class="card">
-        You can rent virtual land if you have short term goals
+        You can rent virtual land if you have short term goals. You can rent a
+        land for any number of months.
+    </div>
+    <div class="card">
+        Customers can roam around different in different stores and can do shopping 
+        while viewing 3D products
     </div>
 </div>
+<div class="heading">Metaverse</div>
+<HomePage/>
 
-<!--HomePage />-->
 <style>
     .card {
         border-radius: 10px;
@@ -85,10 +96,11 @@
     }
     .card-container {
         border: 2pt;
-        width: 20%;
+        width: 40%;
         font-size: 15px;
         font-family: auto;
         display: flex;
         flex-direction: row;
+        margin: 2rem;
     }
 </style>
