@@ -10,16 +10,32 @@
     export let playerCSS = "";
 
     export let isLoaded = false;
+    
     export const callFunction = (gameObjName, functionName, arg) => {
         playerInstance?.SendMessage(gameObjName, functionName, arg);
     }
 
+    export const addEvent = (eventName, e) => {
+        window.unityEvents[eventName] = e;
+    }
+
+    export const clearEvent = (eventName) => {
+        window.unityEvents[eventName] = null;
+    }
+
+    const unityJSEmitter = (eventName, ...args) => {
+        window.unityEvents?.[eventName]?.(...args);
+    }
+
     onMount(() => {
-        console.log("onMount");
+
         const loadUnityPlayer = async () => {
             try {
+                window.unityEvents = { };
                 playerInstance = await createUnityInstance(playerCanvas, config, (progress) => loading = progress * 100);
+                window.unityJSEmitter = unityJSEmitter;
                 isLoaded = true;
+
             }
             catch (e) {
                 console.log(e);

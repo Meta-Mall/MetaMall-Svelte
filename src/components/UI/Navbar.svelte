@@ -52,7 +52,6 @@
             showSnackbar(e.toString(), "error");
         }
     };
-    $: console.log($blockchain);
 
     export let activeTab = "MetaMall";
     export const toggleMenu = () => (menuOpen = !menuOpen);
