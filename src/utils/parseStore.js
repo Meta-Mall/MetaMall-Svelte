@@ -1,13 +1,14 @@
 const parseStore = store => {
     return {
-        price: store[0],
-        rent: store[1],
-        area: store[2],
-        storeNumber: store[3],
-        owner: store[4],
-        tokenId: store[5],
-        currentUser: store[6],
-        status: store[7],
+        owner: store[0],
+        tokenId: store[1],
+        storeNumber: store[2],
+        price: store[3],
+        rent: store[4],
+        isSaleable: store[5],
+        isRentable: store[6],
+        user: store[7],
+        expires: store[8],
     }
 }
 

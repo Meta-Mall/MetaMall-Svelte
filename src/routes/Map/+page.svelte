@@ -8,14 +8,12 @@
     const statusClr = ["#d40b94", "#8a2ce2", "#767778"];
 
     onMount(async () => {
-        //floors = await $blockchain.contract.methods.getAllStores().call({ from: $blockchain.accounts[0] });
+        floors = await $blockchain.contract.methods.getAllStores().call({ from: $blockchain.accounts[0] });
         console.log("floors: ", parseFloors(floors));
     });
 
     const buyLand = async () => {
-        await $blockchain.contract.methods
-            .buyLand(currentStore[3])
-            .call({ from: $blockchain.accounts[0] });
+        await $blockchain.contract.methods.buy(currentStore[3]).call({ from: $blockchain.accounts[0] });
         open = false;
         currentStore = null;
     };
