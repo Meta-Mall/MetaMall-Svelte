@@ -4,6 +4,7 @@
 	import { store } from '../../stores/store'
 	import { blockchain } from "../../blockchain";
 	import { parseFloors } from "../../utils";
+    import { onMount } from "svelte";
 
 	const unityConfig = {
 		loaderUrl: 'MetaMallCore/MetaMallCore.loader.js',
@@ -20,6 +21,12 @@
 		let floors = await $blockchain.contract.methods.getAllStores().call({ from: $blockchain.accounts[0] });
 		console.log("floors: ", parseFloors(floors));
 	}
+
+	onMount(() => {
+		$store.unityInstance.addEvent("PrintSomething", (arg1, arg2, arg3) => {
+			console.log(arg1, arg2, arg3);
+		})
+	})
 
 </script>
 

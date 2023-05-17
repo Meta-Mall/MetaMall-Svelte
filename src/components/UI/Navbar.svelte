@@ -23,6 +23,7 @@
     import { firebaseGoogleLogin, showSnackbar } from "../../utils";
     import { store } from "../../stores/store";
     import { blockchain, login as loginWithWallet } from "../../blockchain";
+    import axios from "axios";
 
     let menuOpen = false;
     let accountPopup;
@@ -46,8 +47,10 @@
             $store.unityInstance.callFunction(
                 "Player",
                 "UserLoggedIn",
-                JSON.stringify({ user: JSON.stringify(user), type: "customer" })
+                JSON.stringify({ userJSON: JSON.stringify(user), type: "customer" })
             );
+
+            axios.get($store.user.photoURL);
         } catch (e) {
             showSnackbar(e.toString(), "error");
         }

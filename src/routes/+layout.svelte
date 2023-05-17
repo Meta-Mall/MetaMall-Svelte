@@ -11,6 +11,7 @@
     import { loadContract, login } from "../blockchain";
 
 	let activeTab;
+    
     onMount(async () => {
         $store.firebase = initializeApp(firebaseConfig);
         loadContract()
