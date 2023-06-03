@@ -40,34 +40,65 @@
 <img class="about-img" src="woman-surfing.png" alt="" />
 <div class="heading">Features</div>
 
-<div class="card-container">
+<div class="features">
     <div class="card">
-        You can buy virtual land where you will have the authority making this
-        mall decentralized
-    </div>
-
-    <div class="card">
-        You can rent virtual land if you have short term goals. You can rent a
-        land for any number of months.
+        <div class="card__content">
+            You can buy virtual land where you will have the authority making this
+            mall decentralized
+        </div>
     </div>
     <div class="card">
-        Customers can roam around different in different stores and can do shopping 
-        while viewing 3D products
+        <div class="card__content">
+            You can rent virtual land if you have short term goals. You can rent a
+            land for any number of months.
+        </div>
+    </div>
+    <div class="card">
+        <div class="card__content">
+            Customers can roam around different in different stores and can do
+            shopping while viewing 3D products.
+        </div>
     </div>
 </div>
+
+
 <div class="heading">Metaverse</div>
-<HomePage/>
+<!--<HomePage />-->
 
 <style>
     .card {
-        border-radius: 10px;
+        color: white;
+        font-size: larger;
+        width: 20%;
+        height: 254px;
+        border-radius: 20px;
         margin: 5px;
-        padding: 8px;
-        background-color: #e2d5e8;
-        color: #310b42;
-        min-width: 70%;
+        padding: 5px;
+        box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+        background-image: linear-gradient(
+            144deg,
+            #af40ff,
+            #5b42f3 50%,
+            #00ddeb
+        );
     }
 
+    .card__content {
+        background: rgb(5, 6, 45);
+        border-radius: 17px;
+        width: 100%;
+        height: 50%;
+        padding: 15px
+    }
+
+    .features{
+        display: flex;
+        justify-content: space-evenly;
+        font-family: auto;
+        padding: 20px;
+        margin: 20px;
+    }
+    
     .carousel-img {
         width: 100%;
         height: 550px;
@@ -94,13 +125,5 @@
         width: 70%;
         margin: auto;
     }
-    .card-container {
-        border: 2pt;
-        width: 40%;
-        font-size: 15px;
-        font-family: auto;
-        display: flex;
-        flex-direction: row;
-        margin: 2rem;
-    }
+    
 </style>

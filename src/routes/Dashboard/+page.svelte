@@ -3,17 +3,30 @@
     import { blockchain } from "../../blockchain";
     import { onMount } from "svelte";
 
-    let vendorAddress = $blockchain?.accounts?.[0];
     let ownedShops = [];
+    let rentedShops = [];
 
-    onMount(() => {
-        //get stores of vendorAddress from contract
+    onMount(async () => {
+        //ownedShops = await $blockchain.contract.methods.getOwnedStores($blockchain?.accounts?.[0]).call({ from: $blockchain.accounts[0] });
+        //rentedShops = await $blockchain.contract.methods.getRentedStores($blockchain?.accounts?.[0]).call({ from: $blockchain.accounts[0] });
+        
     })
+
+    async function getShops(account){
+        if($blockchain.contract && account){
+            ownedShops = await $blockchain.contract.methods.getOwnedStores(account).call({ from: $blockchain.accounts[0] });
+        rentedShops = await $blockchain.contract.methods.getRentedStores(account).call({ from: $blockchain.accounts[0] });
+        }
+       
+    }
+
+    $: getShops($blockchain?.accounts?.[0])
+    
 </script>
 
-{#if vendorAddress}
+{#if $blockchain?.accounts?.[0]}
     <h1>
-        Your Address :{vendorAddress}
+        Your Address :{$blockchain?.accounts?.[0]}
     </h1>
     <div>
         <UploadModal />
@@ -22,10 +35,17 @@
     <div class="heading">Shops Owned:</div>
     <div>
         {#each ownedShops as shop}
-            <div>shop.shopNumber</div>
+            <div>{shop.storeNumber}</div>
         {/each}
     </div>
     <div class="heading">Shops Rented:</div>
+    <div>
+        <div>
+            {#each rentedShops as shop}
+                <div>{shop.storeNumber}</div>
+            {/each}
+        </div>
+    </div>
 {:else}
     You do not have logged In using MetaMask
 {/if}
