@@ -1,32 +1,18 @@
 <script>
+    export let title;
     import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
-    import List, {
-        Item,
-        Text,
-        Graphic,
-        Separator,
-        Subheader,
-    } from "@smui/list";
-    import Drawer, {
-        AppContent,
-        Content,
-        Header,
-        Title as DrawerTitle,
-        Subtitle,
-        Scrim,
-    } from "@smui/drawer";
+    import List, {Item,Text,Graphic,Separator,Subheader,} from "@smui/list";
+    import Drawer, {AppContent,Content,Header,Title as DrawerTitle,Subtitle,Scrim,} from "@smui/drawer";
     import IconButton from "@smui/icon-button";
     import Button, { Label } from "@smui/button";
     import MenuSurface from "@smui/menu-surface";
-    import Textfield from "@smui/textfield";
-
     import { firebaseGoogleLogin, showSnackbar } from "../../utils";
     import { store } from "../../stores/store";
     import { blockchain, login as loginWithWallet } from "../../blockchain";
     import axios from "axios";
 
     let menuOpen = false;
-    let accountPopup;
+    let accountPopup = false;
     let accountBtn;
     let snack;
 
@@ -47,17 +33,39 @@
             $store.unityInstance.callFunction(
                 "Player",
                 "UserLoggedIn",
-                JSON.stringify({ userJSON: JSON.stringify(user), type: "customer" })
+                JSON.stringify({
+                    userJSON: JSON.stringify(user),
+                    type: "customer",
+                })
             );
-
+            surface.setOpen(false);
+            showSnackbar("User Logged In successfully with Google account", "error");
             axios.get($store.user.photoURL);
+
         } catch (e) {
             showSnackbar(e.toString(), "error");
         }
     };
 
+    const loginWithEthereum = async () =>{
+        try {
+            login();
+            surface.setOpen(false);
+            showSnackbar("Logged In With Ethereum Wallet Successfully", "success");
+        } catch (error) {
+            
+        }
+    }
+
     export let activeTab = "MetaMall";
     export const toggleMenu = () => (menuOpen = !menuOpen);
+
+    const scroll = (viewId) => {
+        const v = document.getElementById(viewId);
+        v.scrollIntoView();
+    };
+
+    let surface;
 </script>
 
 <Drawer variant="modal" bind:open={menuOpen}>
@@ -125,54 +133,58 @@
 </Drawer>
 <!-- Don't include fixed={false} if this is a page wide drawer. It adds a style for absolute positioning. -->
 <Scrim fixed={false} />
-<TopAppBar variant="static" color="primary">
+<div class="topbar" variant="static">
     <Row>
         <Section>
-            <IconButton class="material-icons" on:click={toggleMenu}
-                >menu</IconButton
-            >
-            <Title>MetaMall - Shopping Mall in Metaverse</Title>
+            <IconButton class="material-icons" on:click={toggleMenu}>
+                menu
+            </IconButton>
+            <Title>{title}</Title>
         </Section>
         <Section align="end" toolbar>
-            <IconButton
+            {#if window.location.pathname == "/"}
+                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("Home")}>Home</Button>
+                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("About")}>About</Button>
+                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("Features")}>Features</Button>
+                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("Metaverse")}>Metaverse</Button>
+            {/if}
+            <Button
                 bind:this={accountBtn}
-                class="material-icons"
-                aria-label="Account"
-                on:click={() => accountPopup.setOpen(true)}
-            >
-                account_circle
-            </IconButton>
+                style="border-radius: 10px; background: #ff5df9; margin:0px 15px"
+                on:click={() => surface.setOpen(true)}
+                >Login
+            </Button>
+            <div>
+                <MenuSurface bind:this={surface} anchorCorner="BOTTOM_LEFT" style="top: 20px;
+                width: max-content;
+                height: max-content;">
+                    <div
+                        style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;"
+                    >
+                        <Button style="margin-top: 1em;" on:click={loginWithGoogle}>
+                            Login with Google
+                        </Button>
+                        <Button style="margin-top: 1em;" on:click={loginWithEthereum}>
+                            Login with Ethereum Wallet
+                        </Button>
+                    </div>
+                </MenuSurface>
+            </div>
+            
         </Section>
     </Row>
-    <MenuSurface
-        anchorCorner="BOTTOM_RIGHT"
-        anchorElement={accountBtn?.getElement()}
-        bind:this={accountPopup}
-    >
-        <div
-            style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;"
-        >
-            <Textfield
-                value=""
-                type="email"
-                label="Login with gmail or with MetaMask"
-                style="min-width: 250px;"
-                input$autocomplete="email"
-            />
-            <Button style="margin-top: 1em;" on:click={loginWithGoogle}>
-                Login
-            </Button>
-            <Button style="margin-top: 1em;" on:click={loginWithWallet}>
-                Ethereum Login
-            </Button>
-        </div>
-    </MenuSurface>
-</TopAppBar>
+</div>
 
 <style>
+    .topbar {
+        color: white;
+        background-color: #7b0b97;
+        font-family: "Roboto", sans-serif;
+    }
+
     .nav-title {
         font-size: xx-large;
-        font-family: auto;
         padding: 0.5rem;
     }
+
 </style>

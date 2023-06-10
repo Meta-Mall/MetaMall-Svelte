@@ -1,7 +1,6 @@
 <script>
     import { onMount } from "svelte";
 	import { AppContent } from "@smui/drawer";
-	import Navbar from "../components/UI/Navbar.svelte";
     import Snackbar, { Label, Actions } from '@smui/snackbar';
     import IconButton from '@smui/icon-button';
 
@@ -27,7 +26,7 @@
 </script>
 
 <div>
-	<Navbar bind:activeTab />
+	
     <AppContent class="app-content">
         <main class="main-content">
 			<slot />
