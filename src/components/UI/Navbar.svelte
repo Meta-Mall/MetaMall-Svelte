@@ -1,8 +1,21 @@
 <script>
     export let title;
     import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
-    import List, {Item,Text,Graphic,Separator,Subheader,} from "@smui/list";
-    import Drawer, {AppContent,Content,Header,Title as DrawerTitle,Subtitle,Scrim,} from "@smui/drawer";
+    import List, {
+        Item,
+        Text,
+        Graphic,
+        Separator,
+        Subheader,
+    } from "@smui/list";
+    import Drawer, {
+        AppContent,
+        Content,
+        Header,
+        Title as DrawerTitle,
+        Subtitle,
+        Scrim,
+    } from "@smui/drawer";
     import IconButton from "@smui/icon-button";
     import Button, { Label } from "@smui/button";
     import MenuSurface from "@smui/menu-surface";
@@ -10,6 +23,7 @@
     import { store } from "../../stores/store";
     import { blockchain, login as loginWithWallet } from "../../blockchain";
     import axios from "axios";
+    import { onMount } from "svelte";
 
     let menuOpen = false;
     let accountPopup = false;
@@ -39,23 +53,26 @@
                 })
             );
             surface.setOpen(false);
-            showSnackbar("User Logged In successfully with Google account", "error");
+            showSnackbar(
+                "User Logged In successfully with Google account",
+                "error"
+            );
             axios.get($store.user.photoURL);
-
         } catch (e) {
             showSnackbar(e.toString(), "error");
         }
     };
 
-    const loginWithEthereum = async () =>{
+    const loginWithEthereum = async () => {
         try {
             login();
             surface.setOpen(false);
-            showSnackbar("Logged In With Ethereum Wallet Successfully", "success");
-        } catch (error) {
-            
-        }
-    }
+            showSnackbar(
+                "Logged In With Ethereum Wallet Successfully",
+                "success"
+            );
+        } catch (error) {}
+    };
 
     export let activeTab = "MetaMall";
     export const toggleMenu = () => (menuOpen = !menuOpen);
@@ -64,6 +81,10 @@
         const v = document.getElementById(viewId);
         v.scrollIntoView();
     };
+    let windowPathname;
+    onMount(() => {
+        windowPathname = window.location.pathname;
+    });
 
     let surface;
 </script>
@@ -108,26 +129,6 @@
                 <Text>Mall Map</Text>
             </Item>
             <Separator />
-            <Item
-                href="javascript:void(0)"
-                on:click={() => setActive("3D Models")}
-                activated={activeTab === "3D Models"}
-            >
-                <Graphic class="material-icons" aria-hidden="true">star</Graphic
-                >
-                <Text>3D Models</Text>
-            </Item>
-            <Separator />
-            <Item
-                href="javascript:void(0)"
-                on:click={() => setActive("Contact")}
-                activated={activeTab === "Contact"}
-            >
-                <Graphic class="material-icons" aria-hidden="true">send</Graphic
-                >
-                <Text>Contact Us</Text>
-            </Item>
-            <Separator />
         </List>
     </Content>
 </Drawer>
@@ -142,11 +143,23 @@
             <Title>{title}</Title>
         </Section>
         <Section align="end" toolbar>
-            {#if window.location.pathname == "/"}
-                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("Home")}>Home</Button>
-                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("About")}>About</Button>
-                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("Features")}>Features</Button>
-                <Button style="border-radius: 10px; color:white; margin:0px 10px" on:click={() => scroll("Metaverse")}>Metaverse</Button>
+            {#if windowPathname == "/"}
+                <Button
+                    style="border-radius: 10px; color:white; margin:0px 10px"
+                    on:click={() => scroll("Home")}>Home</Button
+                >
+                <Button
+                    style="border-radius: 10px; color:white; margin:0px 10px"
+                    on:click={() => scroll("About")}>About</Button
+                >
+                <Button
+                    style="border-radius: 10px; color:white; margin:0px 10px"
+                    on:click={() => scroll("Features")}>Features</Button
+                >
+                <Button
+                    style="border-radius: 10px; color:white; margin:0px 10px"
+                    on:click={() => scroll("Metaverse")}>Metaverse</Button
+                >
             {/if}
             <Button
                 bind:this={accountBtn}
@@ -155,22 +168,31 @@
                 >Login
             </Button>
             <div>
-                <MenuSurface bind:this={surface} anchorCorner="BOTTOM_LEFT" style="top: 20px;
+                <MenuSurface
+                    bind:this={surface}
+                    anchorCorner="BOTTOM_LEFT"
+                    style="top: 20px;
                 width: max-content;
-                height: max-content;">
+                height: max-content;"
+                >
                     <div
                         style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;"
                     >
-                        <Button style="margin-top: 1em;" on:click={loginWithGoogle}>
+                        <Button
+                            style="margin-top: 1em;"
+                            on:click={loginWithGoogle}
+                        >
                             Login with Google
                         </Button>
-                        <Button style="margin-top: 1em;" on:click={loginWithEthereum}>
+                        <Button
+                            style="margin-top: 1em;"
+                            on:click={loginWithWallet}
+                        >
                             Login with Ethereum Wallet
                         </Button>
                     </div>
                 </MenuSurface>
             </div>
-            
         </Section>
     </Row>
 </div>
@@ -186,5 +208,4 @@
         font-size: xx-large;
         padding: 0.5rem;
     }
-
 </style>

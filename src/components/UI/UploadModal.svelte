@@ -4,7 +4,8 @@
     import axios from "axios";
     import { apis } from "../../utils/apis";
     import FormData from "form-data";
-
+    export let shopNumber;
+    
     let open = false;
     let buttoned = "Nothing yet.";
     let files;
@@ -28,7 +29,7 @@
             form.append("name", product.name);
             form.append("description", product.description);
             form.append("price", product.price);
-            form.append("store", product.store);
+            form.append("store", shopNumber);
             form.append("order_link", product.order_link);
             form.append("model_file", files[0]);
             

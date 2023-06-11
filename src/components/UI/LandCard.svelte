@@ -2,12 +2,11 @@
     import MdStore from 'svelte-icons/md/MdStore.svelte'
     export let content;
     export let heading;
-    export let icon;
 </script>
 
 <div class="card">
     <div class="icon-style">
-        {icon}
+        <MdStore/>
     </div>
     <div class="content">{content}</div>
     <div class="heading">{heading}</div>
