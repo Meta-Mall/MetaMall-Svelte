@@ -38,10 +38,20 @@
         }
     };
 
-    onMount(
-        async () =>
-            (floors = await $blockchain.contract?.methods.getAllStores().call())
-    );
+    onMount(() => getFloors());
+
+    const getFloors = async (blockchain) => {
+        if (blockchain?.contract && blockchain.accounts) {
+            const data = await blockchain.contract.methods
+                .getAllStores()
+                .call({ from: blockchain.accounts[0] });
+            console.log("data: ", data);
+            floors = parseFloors(data);
+            console.log("floors: ", floors);
+        }
+    };
+
+    $: getFloors($blockchain);
 
     const buyLand = async () => {
         try {
@@ -59,9 +69,7 @@
                 })
                 .on("confirmation", function (confirmationNumber, receipt) {
                     console.log("on confirmation");
-                    floors = $blockchain.contract.methods
-                        .getAllStores()
-                        .call({ from: $blockchain.accounts[0] });
+                    getFloors($blockchain);
                 });
 
             modalOpen = false;
@@ -86,6 +94,9 @@
                     from: $blockchain.accounts[0],
                     value: +currentStore.rent,
                     gasPrice: 10,
+                }).on("confirmation", function (confirmationNumber, receipt) {
+                    console.log("on confirmation");
+                    getFloors($blockchain);
                 });
             modalOpen = false;
             resetCurrentStore();
@@ -129,6 +140,8 @@
                     currentStore.isSaleable
                 )
                 .send({ from: $blockchain.accounts[0] });
+            
+            getFloors($blockchain);
         } catch (error) {
             console.log("error save details: ", error);
         }
@@ -139,13 +152,12 @@
             .getStoreDetails(store)
             .call({ from: $blockchain.accounts[0] });
         currentStore = parseStore(str);
-        console.log("currentStore:", currentStore);
     };
 
     const addProduct = async () => {
         productDialogOpen = true;
         modalOpen = false;
-    }
+    };
 
     let modalOpen = false;
     let buttoned = "Nothing yet.";
@@ -186,25 +198,24 @@
 
         {#each floors as floor, i}
             <h1>Floor no. {i}</h1>
-            {#if floor.length > 0}
-                {#each floor as store}
-                    <Button
-                        on:click={() => {
-                            currentFloor = i;
-                            setStore(store);
-                            modalOpen = true;
-                        }}
-                        style="background-color:{getColor(store)};"
-                        touch
-                        variant="raised"
-                    >
-                        <Label>{store.storeNumber}</Label>
-                    </Button>
-                {:else}
-                    No store on this floor
-                {/each}
-            {/if}
+            {#each floor as store}
+                <Button
+                    on:click={() => {
+                        currentFloor = i;
+                        setStore(store);
+                        modalOpen = true;
+                    }}
+                    style="background-color:{getColor(store)};"
+                    touch
+                    variant="raised"
+                >
+                    <Label>{store.storeNumber}</Label>
+                </Button>
+            {:else}
+                No store on this floor
+            {/each}
         {/each}
+
         <Dialog
             open={modalOpen}
             on:SMUIDialog:closed={(e) => {
@@ -333,8 +344,10 @@
             </Actions>
         </Dialog>
 
-        <UploadModal open={productDialogOpen} shopNumber={currentStore?.shopNumber}/>
-
+        <UploadModal
+            open={productDialogOpen}
+            shopNumber={currentStore?.shopNumber}
+        />
     </div>
 {:else}
     <Error />
