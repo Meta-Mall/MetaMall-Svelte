@@ -1,7 +1,12 @@
 <script>
     import Button, { Label } from "@smui/button";
     import { onMount } from "svelte";
-    import { parseFloors, parseStore, etherToWei } from "../../utils";
+    import {
+        parseFloors,
+        parseStore,
+        etherToWei,
+        weiToEther,
+    } from "../../utils";
     import { blockchain } from "../../blockchain";
     import Navbar from "../../components/UI/Navbar.svelte";
     import Dialog, { Header, Title, Actions, Content } from "@smui/dialog";
@@ -13,9 +18,10 @@
     import Icon from "@smui/textfield/icon";
     import HelperText from "@smui/textfield/helper-text";
     import Error from "../../components/UI/Error.svelte";
+    import UploadModal from "../../components/UI/UploadModal.svelte";
 
     let floors = [];
-    const statusClr = ["#f72585", "#8a2ce2", "#121646", "#767778", "#302434"];
+    const statusClr = ["#f72585", "#8a2ce2", "#131699", "#767778", "#302434"];
 
     const resetCurrentStore = () =>
         (currentStore = { price: null, rent: null });
@@ -32,8 +38,14 @@
         }
     };
 
+    onMount(
+        async () =>
+            (floors = await $blockchain.contract?.methods.getAllStores().call())
+    );
+
     const buyLand = async () => {
         try {
+            console.log("floor num ", currentFloor);
             const res = await $blockchain.contract.methods
                 .buy(
                     currentFloor,
@@ -44,6 +56,12 @@
                     from: $blockchain.accounts[0],
                     value: +currentStore.price,
                     gasPrice: 10,
+                })
+                .on("confirmation", function (confirmationNumber, receipt) {
+                    console.log("on confirmation");
+                    floors = $blockchain.contract.methods
+                        .getAllStores()
+                        .call({ from: $blockchain.accounts[0] });
                 });
 
             modalOpen = false;
@@ -58,7 +76,7 @@
     const rentLand = async () => {
         try {
             const res = await $blockchain.contract.methods
-                .rentLand(
+                .rent(
                     currentFloor,
                     currentStore.storeNumber,
                     currentStore.tokenId,
@@ -80,70 +98,61 @@
 
     const saveDetails = async () => {
         try {
-            console.log("save details")
-            if (change.price) {
-                await $blockchain.contract.methods
-                    .setRentFee(
-                        currentFloor,
-                        currentStore.storeNumber,
-                        currentStore.rent
-                    )
-                    .send({ from: $blockchain.accounts[0] });
-            }
-            if (change.rent) {
-                await $blockchain.contract.methods
-                    .setPrice(
-                        currentFloor,
-                        currentStore.storeNumber,
-                        currentStore.price
-                    )
-                    .send({ from: $blockchain.accounts[0] });
-            }
-            if (change.saleable) {
-                await $blockchain.contract.methods
-                    .setRentable(
-                        currentFloor,
-                        currentStore.storeNumber,
-                        currentStore.isRentable
-                    )
-                    .send({ from: $blockchain.accounts[0] });
-            }
-            console.log("change.rentable: ", change.rentable);
+            await $blockchain.contract.methods
+                .setPrice(
+                    currentFloor,
+                    currentStore.storeNumber,
+                    currentStore.rent
+                )
+                .send({ from: $blockchain.accounts[0] });
 
-            if (change.rentable) {
-                await $blockchain.contract.methods
-                    .setSaleable(
-                        currentFloor,
-                        currentStore.storeNumber,
-                        currentStore.isSaleable
-                    )
-                    .send({ from: $blockchain.accounts[0] });
-            }
+            await $blockchain.contract.methods
+                .setRentFee(
+                    currentFloor,
+                    currentStore.storeNumber,
+                    currentStore.price
+                )
+                .send({ from: $blockchain.accounts[0] });
+
+            await $blockchain.contract.methods
+                .setSaleable(
+                    currentFloor,
+                    currentStore.storeNumber,
+                    currentStore.isRentable
+                )
+                .send({ from: $blockchain.accounts[0] });
+
+            await $blockchain.contract.methods
+                .setRentable(
+                    currentFloor,
+                    currentStore.storeNumber,
+                    currentStore.isSaleable
+                )
+                .send({ from: $blockchain.accounts[0] });
         } catch (error) {
             console.log("error save details: ", error);
         }
     };
 
-    const openDialog = async (store) => {
-        modalOpen = true;
-        if (!store.isRentable && !store.isSaleable && false) {
-            const str = await $blockchain.contract.methods
-                .getStoreDetails(store)
-                .call({ from: $blockchain.accounts[0] });
-            currentStore = parseStore(str);
-            console.log("currentStore: rentee", currentStore);
-        } else {
-            currentStore = parseStore(store);
-            console.log("currentStore: not rentee", currentStore);
-        }
+    const setStore = async (store) => {
+        const str = await $blockchain.contract.methods
+            .getStoreDetails(store)
+            .call({ from: $blockchain.accounts[0] });
+        currentStore = parseStore(str);
+        console.log("currentStore:", currentStore);
     };
+
+    const addProduct = async () => {
+        productDialogOpen = true;
+        modalOpen = false;
+    }
 
     let modalOpen = false;
     let buttoned = "Nothing yet.";
     let currentFloor = null;
     let activeTab;
     let currentStore = { price: null, rent: null };
-
+    let productDialogOpen = false;
     let change = {
         price: false,
         rent: false,
@@ -175,19 +184,15 @@
             </div>
         </div>
 
-        {#await $blockchain.contract.methods
-            .getAllStores()
-            .call({ from: $blockchain.accounts[0] })}
-            <h1>Loading...</h1>
-        {:then floors}
-            {#each floors as floor, i}
-                <h1>Floor no. {i}</h1>
+        {#each floors as floor, i}
+            <h1>Floor no. {i}</h1>
+            {#if floor.length > 0}
                 {#each floor as store}
                     <Button
                         on:click={() => {
-                            currentStore = parseStore(store);
-                            modalOpen = true;
                             currentFloor = i;
+                            setStore(store);
+                            modalOpen = true;
                         }}
                         style="background-color:{getColor(store)};"
                         touch
@@ -198,11 +203,8 @@
                 {:else}
                     No store on this floor
                 {/each}
-            {/each}
-        {:catch error}
-            <p style="color: red">{error.message}</p>
-        {/await}
-
+            {/if}
+        {/each}
         <Dialog
             open={modalOpen}
             on:SMUIDialog:closed={(e) => {
@@ -234,7 +236,7 @@
                         <h3 style="margin-right: 20px;">Owner :</h3>
                         <div>{currentStore?.owner}</div>
                     </div>
-                    {#if currentStore.user}
+                    {#if currentStore?.user}
                         <div class="row">
                             <h3 style="margin-right: 20px;">Tenant :</h3>
                             <div>{currentStore?.user}</div>
@@ -283,7 +285,7 @@
                                     style="width:45px;"><GiMoneyStack /></Icon
                                 >
                                 <HelperText slot="helper"
-                                    >Rent/mo of this land in ETH</HelperText
+                                    >Rent/mo of this land</HelperText
                                 >
                             </Textfield>
                         </div>
@@ -318,7 +320,7 @@
             <Actions>
                 <Button>Cancel</Button>
                 {#if currentStore?.owner == $blockchain.accounts[0]}
-                    <Button>Add Product</Button>
+                    <Button on:click={addProduct}>Add Product</Button>
                     <Button on:click={saveDetails}>Save</Button>
                 {:else}
                     {#if currentStore?.isSaleable}
@@ -330,6 +332,9 @@
                 {/if}
             </Actions>
         </Dialog>
+
+        <UploadModal open={productDialogOpen} shopNumber={currentStore?.shopNumber}/>
+
     </div>
 {:else}
     <Error />

@@ -19,9 +19,6 @@
             ownedShops = await $blockchain.contract.methods
                 .getOwnedStores(account)
                 .call({ from: $blockchain.accounts[0] });
-            rentedShops = await $blockchain.contract.methods
-                .getRentedStores()
-                .call({ from: $blockchain.accounts[0] });
         }
     }
     $: getShops($blockchain?.accounts?.[0]);

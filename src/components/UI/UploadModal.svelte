@@ -5,8 +5,9 @@
     import { apis } from "../../utils/apis";
     import FormData from "form-data";
     export let shopNumber;
-    
-    let open = false;
+    export let open = false;
+
+
     let buttoned = "Nothing yet.";
     let files;
 
@@ -129,10 +130,6 @@
         </div>
     </Dialog>
 </div>
-
-<Button variant="raised" on:click={() => (open = true)}>
-    <Label>Add Product</Label>
-</Button>
 
 <style>
     .dialog {
