@@ -1,13 +1,7 @@
 <script>
     export let title;
     import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
-    import List, {
-        Item,
-        Text,
-        Graphic,
-        Separator,
-        Subheader,
-    } from "@smui/list";
+    import List, { Item, Text, Graphic, Separator, Subheader } from "@smui/list";
     import Drawer, {
         AppContent,
         Content,
@@ -21,8 +15,7 @@
     import MenuSurface from "@smui/menu-surface";
     import { firebaseGoogleLogin, showSnackbar } from "../../utils";
     import { store } from "../../stores/store";
-    import { blockchain, login as loginWithWallet } from "../../blockchain";
-    import axios from "axios";
+    import { login as loginWithWallet } from "../../blockchain";
     import { onMount } from "svelte";
 
     let menuOpen = false;
@@ -55,9 +48,8 @@
             surface.setOpen(false);
             showSnackbar(
                 "User Logged In successfully with Google account",
-                "error"
+                "success"
             );
-            axios.get($store.user.photoURL);
         } catch (e) {
             showSnackbar(e.toString(), "error");
         }

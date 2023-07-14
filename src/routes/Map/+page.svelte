@@ -56,6 +56,7 @@
     const buyLand = async () => {
         try {
             console.log("floor num ", currentFloor);
+            const block = await $blockchain.web3.eth.getBlock('latest');
             const res = await $blockchain.contract.methods
                 .buy(
                     currentFloor,
@@ -66,6 +67,7 @@
                     from: $blockchain.accounts[0],
                     value: +currentStore.price,
                     gasPrice: 10,
+                    maxFeePerGas: 250000000000
                 })
                 .on("confirmation", function (confirmationNumber, receipt) {
                     console.log("on confirmation");
@@ -109,13 +111,20 @@
 
     const saveDetails = async () => {
         try {
+            // await $blockchain.contract.methods
+            //     .setPrice(
+            //         currentFloor,
+            //         currentStore.storeNumber,
+            //         currentStore.rent
+            //     )
+            //     .send({ from: $blockchain.accounts[0] });
             await $blockchain.contract.methods
-                .setPrice(
+                .setRentable(
                     currentFloor,
                     currentStore.storeNumber,
-                    currentStore.rent
+                    currentStore.isSaleable
                 )
-                .send({ from: $blockchain.accounts[0] });
+                .send({ from: $blockchain.accounts[0], gasPrice: 0.0001, maxFeePerGas: 250000000000 });
 
             await $blockchain.contract.methods
                 .setRentFee(
@@ -123,23 +132,16 @@
                     currentStore.storeNumber,
                     currentStore.price
                 )
-                .send({ from: $blockchain.accounts[0] });
+                .send({ from: $blockchain.accounts[0], gasPrice: 0.0001, maxFeePerGas: 250000000000 });
 
-            await $blockchain.contract.methods
-                .setSaleable(
-                    currentFloor,
-                    currentStore.storeNumber,
-                    currentStore.isRentable
-                )
-                .send({ from: $blockchain.accounts[0] });
+            // await $blockchain.contract.methods
+            //     .setSaleable(
+            //         currentFloor,
+            //         currentStore.storeNumber,
+            //         currentStore.isRentable
+            //     )
+            //     .send({ from: $blockchain.accounts[0] });
 
-            await $blockchain.contract.methods
-                .setRentable(
-                    currentFloor,
-                    currentStore.storeNumber,
-                    currentStore.isSaleable
-                )
-                .send({ from: $blockchain.accounts[0] });
             
             getFloors($blockchain);
         } catch (error) {

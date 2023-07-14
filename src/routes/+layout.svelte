@@ -8,8 +8,10 @@
     import { initializeApp } from "firebase/app";
     import firebaseConfig from '../firebaseConfig.js'
     import { loadContract, login } from "../blockchain";
+    import axios from "axios";
+    import { PUBLIC_SERVER_URL } from '$env/static/public'
 
-	let activeTab;
+    axios.defaults.baseURL = PUBLIC_SERVER_URL;
     
     onMount(async () => {
         $store.firebase = initializeApp(firebaseConfig);

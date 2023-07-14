@@ -5,6 +5,7 @@
 	import { blockchain } from "../../blockchain";
 	import { parseFloors } from "../../utils";
     import { onMount } from "svelte";
+	import { unityEvents } from "../unity/unityEvents";
 
 	const unityConfig = {
 		loaderUrl: 'MetaMallCore/MetaMallCore.loader.js',
@@ -23,9 +24,9 @@
 	}
 
 	onMount(() => {
-		$store.unityInstance.addEvent("PrintSomething", (arg1, arg2, arg3) => {
-			console.log(arg1, arg2, arg3);
-		})
+		for(const e in unityEvents) {
+			$store.unityInstance.addEvent(e, unityEvents[e]);
+		}
 	})
 
 </script>

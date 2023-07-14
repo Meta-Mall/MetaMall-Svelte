@@ -1,12 +1,27 @@
 <script>
     import Navbar from "../components/UI/Navbar.svelte";
     import Button, { Label } from "@smui/button";
+	import UnityPlayer from "../components/unity/UnityPlayer.svelte";
+	import { store } from '../stores/store.js'
+
 
     let activeTab;
     const scroll = (viewId) => {
         const v = document.getElementById(viewId);
         v.scrollIntoView();
     };
+
+    const unityConfig = {
+		loaderUrl: 'MetaMallCore/MetaMallCore.loader.js',
+		dataUrl: 'MetaMallCore/MetaMallCore.data',
+		frameworkUrl: 'MetaMallCore/MetaMallCore.framework.js',
+		codeUrl: 'MetaMallCore/MetaMallCore.wasm',
+        companyName: 'MetaMall',
+        productName: 'WebApp',
+        productVersion: '0.1a',
+	};
+
+
 </script>
 
 <Navbar bind:activeTab title="MetaMall-Shopping Mall in Metaverse" />
@@ -74,9 +89,16 @@
 </div>
 <div id="Metaverse">
     <h1 class="features-heading">META MALL</h1>
+<UnityPlayer bind:this={$store.unityInstance} config={unityConfig} playerCSS="metamall-player" />
+
 </div>
 
 <style>
+    :global(.metamall-player) {
+        width: 100%;
+        margin: 0 auto;
+    }
+
     .features-list {
         display: flex;
         flex-wrap: wrap;

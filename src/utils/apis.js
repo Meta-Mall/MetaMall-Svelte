@@ -1,4 +1,5 @@
 export const apis = {
-    "addProduct" : "http://localhost:5000/stores/add-product"
 
+    addProduct: "/stores/add-product",
+    getAllStores: "/stores/all",
 }
