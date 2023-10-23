@@ -1,18 +1,28 @@
 <script>
-	import { onMount } from "svelte";
-    import { store } from "../../stores/store";
+	import { onMount, createEventDispatcher } from "svelte";
     
-    let playerCanvas;
     let loading = 0;
+    let playerCanvas;
     let playerInstance = null;
+    const dispatch = createEventDispatcher();
 
+    
     export let config = {}
     export let playerCSS = "";
-
+    export let id = "unity-player"
     export let isLoaded = false;
-    
+    export const returnValuePromises = { };
+    export const canvasId = 'unity-canvas'
+
     export const callFunction = (gameObjName, functionName, arg) => {
         playerInstance?.SendMessage(gameObjName, functionName, arg);
+    }
+
+    export const callFunctionWithReturn = async (gameObjName, functionName, arg) => {
+        playerInstance?.SendMessage(gameObjName, functionName, arg);
+        return new Promise((resolve, reject) => {
+            returnValuePromises[`${functionName}_Returned`] = { resolve, reject };
+        })
     }
 
     export const addEvent = (eventName, e) => {
@@ -21,6 +31,19 @@
 
     export const clearEvent = (eventName) => {
         window.unityEvents[eventName] = null;
+    }
+
+    export const focusUnity = () => {
+        dispatch('focus');
+    }
+
+    export const blurUnity = () => {
+        dispatch('blur');
+    }
+
+    export const fullScreen = (value) => {
+        console.log("asad")
+        playerInstance.SetFullscreen(value ? 1 : 0);
     }
 
     const unityJSEmitter = (eventName, ...args) => {
@@ -35,7 +58,7 @@
                 playerInstance = await createUnityInstance(playerCanvas, config, (progress) => loading = progress * 100);
                 window.unityJSEmitter = unityJSEmitter;
                 isLoaded = true;
-
+                dispatch('load');
             }
             catch (e) {
                 console.log(e);
@@ -51,11 +74,8 @@
     <script src={config.loaderUrl}/>
 {/if}
 
-<div>
-    Unity Player
-    <canvas id="unity-canvas" bind:this={playerCanvas} class={playerCSS}>
-
-    </canvas>
+<div {id}>
+    <canvas id={canvasId} bind:this={playerCanvas} class={playerCSS} />
     {#if loading != 100}
         <div class="loading">
             Loading {loading}

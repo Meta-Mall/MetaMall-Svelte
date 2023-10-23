@@ -3,13 +3,10 @@
     import Button, { Label } from "@smui/button";
 	import UnityPlayer from "../components/unity/UnityPlayer.svelte";
 	import { store } from '../stores/store.js'
-
+    import { onMount } from "svelte";
+    import { unityEvents } from "../components/unity/unityEvents";
 
     let activeTab;
-    const scroll = (viewId) => {
-        const v = document.getElementById(viewId);
-        v.scrollIntoView();
-    };
 
     const unityConfig = {
 		loaderUrl: 'MetaMallCore/MetaMallCore.loader.js',
@@ -21,6 +18,30 @@
         productVersion: '0.1a',
 	};
 
+    let playerHidden = true;
+
+    const scroll = viewId => {
+        const v = document.getElementById(viewId);
+        v.scrollIntoView();
+    };
+
+    const MaximizeMetaverse = async () => {
+        playerHidden = false;
+        console.log('maximizing');
+        const cursorLockState = await $store.unityInstance.callFunctionWithReturn('UI', 'GetCursorInfo');
+        if (cursorLockState == 'Locked') {
+            document.getElementById($store.unityInstance.canvasId).requestPointerLock();
+        }
+    };
+
+    
+	const registerUnityEvents = () => {
+		for(const e in unityEvents) {
+			$store.unityInstance.addEvent(e, unityEvents[e]);
+		}
+	}
+
+    $: console.log('playerHidden: ', playerHidden);
 
 </script>
 
@@ -30,7 +51,7 @@
         <div class="subheading">Welcome to</div>
         <div class="heading">META MALL</div>
         <div class="subheading">A Shopping Mall in Metaverse</div>
-        <Button on:click={() => scroll("Metaverse")} class="btn">Step Into Metaverse</Button>
+        <Button on:click={() => $store.unityInstance.focusUnity()} class="btn">Step Into Metaverse</Button>
     </div>
     <div>
         <img class="welcome-img" src="src\assets\welcome.png" alt="welcome" />
@@ -89,14 +110,29 @@
 </div>
 <div id="Metaverse">
     <h1 class="features-heading">META MALL</h1>
-<UnityPlayer bind:this={$store.unityInstance} config={unityConfig} playerCSS="metamall-player" />
-
+    <UnityPlayer
+        id="metamall-player"
+        config={unityConfig}
+        playerCSS={`metamall-player ${playerHidden ? 'player-hidden' : ''}`}
+        bind:this={$store.unityInstance} 
+        on:focus={MaximizeMetaverse}
+        on:blur={() => {console.log('blur'); playerHidden = true}}
+        on:load={registerUnityEvents}
+    />
 </div>
 
 <style>
     :global(.metamall-player) {
-        width: 100%;
-        margin: 0 auto;
+        position: fixed;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 3;
+        transition: all 0.3s;
+    }
+
+    :global(.player-hidden.metamall-player) {
+        scale: 0;
     }
 
     .features-list {

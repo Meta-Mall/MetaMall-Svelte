@@ -18,6 +18,15 @@ export const unityEvents = {
             const unity = get(store).unityInstance;
             unity.callFunction("ShopsManager", "ReceiveStores", storesString);
         }
-        
+    },
+    "GetCursorInfo_Returned": cursorMode => {
+        console.log('getcursor returned: ', cursorMode)
+        const storeSnapshot = get(store);
+        storeSnapshot.unityInstance.returnValuePromises['GetCursorInfo_Returned']?.resolve(cursorMode);
+        // storeSnapshot.unityInstance.returnValuePromises['GetCursorInfo_Returned']?.resolve({
+        //     '0': 'None',
+        //     '1': 'Locked',
+        //     '2': 'Confined'
+        // }[cursorMode])
     }
 }
