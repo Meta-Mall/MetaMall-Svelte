@@ -28,5 +28,9 @@ export const unityEvents = {
         //     '1': 'Locked',
         //     '2': 'Confined'
         // }[cursorMode])
+    },
+    "OpenLink" : product_link => {
+        console.log("open product link")
+        window.open(product_link, '_blank');
     }
 }

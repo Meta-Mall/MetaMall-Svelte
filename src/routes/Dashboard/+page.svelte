@@ -19,6 +19,7 @@
             ownedShops = await $blockchain.contract.methods
                 .getOwnedStores(account)
                 .call({ from: $blockchain.accounts[0] });
+                console.log("Shops got from blockchain", ownedShops)
         }
     }
     $: getShops($blockchain?.accounts?.[0]);
@@ -58,11 +59,7 @@
             <p class="address">{$blockchain?.accounts?.[0]}</p>
         </div>
     </div>
-    <div id="balance">
-        <img class="wallet-img" alt="wallet" src="src\\assets\\eth.png" />
-        <h1>Balance :</h1>
-        {web3.eth?.getBalance($blockchain?.accounts?.[0])}
-    </div>
+    
     <div class="land-cards">
         <LandCard heading="Owned Shops" content={ownedShops.length} />
         <LandCard heading="Rented Shops" content={rentedShops.length} />
