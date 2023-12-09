@@ -31,6 +31,6 @@ export const unityEvents = {
     },
     "OpenLink" : product_link => {
         console.log("open product link")
-        window.open(product_link, '_blank');
+        window.open('https://' + product_link, '_blank');
     }
 }

@@ -18,15 +18,13 @@
         productVersion: '0.1a',
 	};
 
-    let playerHidden = true;
-
     const scroll = viewId => {
         const v = document.getElementById(viewId);
         v.scrollIntoView();
     };
 
     const MaximizeMetaverse = async () => {
-        playerHidden = false;
+        $store.unityHidden = false;
         console.log('maximizing');
         const cursorLockState = await $store.unityInstance.callFunctionWithReturn('UI', 'GetCursorInfo');
         if (cursorLockState == 'Locked') {
@@ -41,7 +39,7 @@
 		}
 	}
 
-    $: console.log('playerHidden: ', playerHidden);
+    $: console.log('playerHidden: ', $store.unityHidden);
 
 </script>
 
@@ -109,14 +107,13 @@
     </div>
 </div>
 <div id="Metaverse">
-    <h1 class="features-heading">META MALL</h1>
     <UnityPlayer
         id="metamall-player"
         config={unityConfig}
-        playerCSS={`metamall-player ${playerHidden ? 'player-hidden' : ''}`}
+        playerCSS={`metamall-player ${$store.unityHidden ? 'player-hidden' : ''}`}
         bind:this={$store.unityInstance} 
         on:focus={MaximizeMetaverse}
-        on:blur={() => {console.log('blur'); playerHidden = true}}
+        on:blur={() => {console.log('blur'); $store.unityHidden = true}}
         on:load={registerUnityEvents}
     />
 </div>

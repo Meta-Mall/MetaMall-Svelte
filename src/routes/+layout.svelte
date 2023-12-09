@@ -22,8 +22,8 @@
             login();
         };
 
-        window.ethereum.on("chainChanged", blockchainReload);
-        window.ethereum.on("accountsChanged", blockchainReload);
+        window.ethereum?.on("chainChanged", blockchainReload);
+        window.ethereum?.on("accountsChanged", blockchainReload);
     });
 
     const handleGlobalKeyDown = (e) => {
@@ -42,6 +42,9 @@
         if (!document.pointerLockElement && cursorLockState !== 'Confined') {
             console.log('minimizing');
             MinimizeMetaverse();
+        }
+        else if (document.pointerLockElement && $store.unityHidden) {
+            document.exitPointerLock();
         }
     };
 </script>
@@ -66,3 +69,9 @@
         </Snackbar>
     </AppContent>
 </div>
+
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
