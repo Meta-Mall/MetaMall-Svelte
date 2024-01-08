@@ -4,6 +4,11 @@ import { blockchain } from "../../blockchain";
 import { get, writable } from "svelte/store";
 import { apis } from "../../utils/apis";
 
+const CursorModes = {
+    None: 'None',
+    Locked: 'Locked',
+    Confined: 'Confined',
+};
 
 export const unityEvents = {
     "PrintSomething": (arg1, arg2, arg3) => {
@@ -16,7 +21,13 @@ export const unityEvents = {
             const storesString = stores.join(';;');
     
             const unity = get(store).unityInstance;
-            unity.callFunction("ShopsManager", "ReceiveStores", storesString);
+            unity?.callFunction?.("ShopsManager", "ReceiveStores", storesString);
+        }
+    },
+    "CursorMode": cursorMode => {
+        const storeSnapshot = get(store);
+        if (cursorMode === CursorModes.Locked) {
+            document.getElementById(storeSnapshot.unityInstance.canvasId).requestPointerLock();
         }
     },
     "GetCursorInfo_Returned": cursorMode => {

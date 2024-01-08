@@ -37,15 +37,19 @@
     };
 
     const handleMetaverseCursorLock = async () => {
-        console.log('on cursor lock change');
-        const cursorLockState = await $store.unityInstance?.callFunctionWithReturn('UI', 'GetCursorInfo')
-        if (!document.pointerLockElement && cursorLockState !== 'Confined') {
-            console.log('minimizing');
-            MinimizeMetaverse();
-        }
-        else if (document.pointerLockElement && $store.unityHidden) {
-            document.exitPointerLock();
-        }
+        // if ($store.unityHidden) { return; }
+        // console.log('on cursor lock change');
+        // const cursorLockState = await $store.unityInstance?.callFunctionWithReturn('UI', 'GetCursorInfo')
+        // if (!document.pointerLockElement && cursorLockState !== 'Confined') {
+        //     console.log('minimizing');
+        //     MinimizeMetaverse();
+        // }
+        // else if (document.pointerLockElement && $store.unityHidden) {
+        //     document.exitPointerLock();
+        // }
+
+        
+
     };
 </script>
 
