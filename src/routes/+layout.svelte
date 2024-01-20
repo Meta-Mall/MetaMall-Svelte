@@ -10,6 +10,7 @@
     import { initializeApp } from "firebase/app";
     import { loadContract, login } from "../blockchain";
     import { PUBLIC_SERVER_URL } from "$env/static/public";
+    import { UnityCursorModes } from "../components/unity/unityEvents.js";
 
     axios.defaults.baseURL = PUBLIC_SERVER_URL;
 
@@ -37,19 +38,12 @@
     };
 
     const handleMetaverseCursorLock = async () => {
-        // if ($store.unityHidden) { return; }
-        // console.log('on cursor lock change');
-        // const cursorLockState = await $store.unityInstance?.callFunctionWithReturn('UI', 'GetCursorInfo')
-        // if (!document.pointerLockElement && cursorLockState !== 'Confined') {
-        //     console.log('minimizing');
-        //     MinimizeMetaverse();
-        // }
-        // else if (document.pointerLockElement && $store.unityHidden) {
-        //     document.exitPointerLock();
-        // }
-
-        
-
+        // setTimeout to wait for browser requesting pointer lock if any pending
+        setTimeout(async () => {
+            if (!document.pointerLockElement && $store.unityCursorState === UnityCursorModes.Locked) {
+                MinimizeMetaverse();
+            }
+        }, 200);
     };
 </script>
 

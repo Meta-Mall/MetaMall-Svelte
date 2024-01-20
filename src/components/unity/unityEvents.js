@@ -4,7 +4,7 @@ import { blockchain } from "../../blockchain";
 import { get, writable } from "svelte/store";
 import { apis } from "../../utils/apis";
 
-const CursorModes = {
+export const UnityCursorModes = {
     None: 'None',
     Locked: 'Locked',
     Confined: 'Confined',
@@ -26,12 +26,12 @@ export const unityEvents = {
     },
     "CursorMode": cursorMode => {
         const storeSnapshot = get(store);
-        if (cursorMode === CursorModes.Locked) {
+        store.update(s => ({...s, unityCursorState: cursorMode}));
+        if (cursorMode === UnityCursorModes.Locked) {
             document.getElementById(storeSnapshot.unityInstance.canvasId).requestPointerLock();
         }
     },
     "GetCursorInfo_Returned": cursorMode => {
-        console.log('getcursor returned: ', cursorMode)
         const storeSnapshot = get(store);
         storeSnapshot.unityInstance.returnValuePromises['GetCursorInfo_Returned']?.resolve(cursorMode);
         // storeSnapshot.unityInstance.returnValuePromises['GetCursorInfo_Returned']?.resolve({

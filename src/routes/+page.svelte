@@ -1,10 +1,9 @@
 <script>
     import Navbar from "../components/UI/Navbar.svelte";
-    import Button, { Label } from "@smui/button";
+    import Button from "@smui/button";
 	import UnityPlayer from "../components/unity/UnityPlayer.svelte";
 	import { store } from '../stores/store.js'
-    import { onMount } from "svelte";
-    import { unityEvents } from "../components/unity/unityEvents";
+    import { UnityCursorModes, unityEvents } from "../components/unity/unityEvents";
 
     let activeTab;
 
@@ -25,9 +24,7 @@
 
     const MaximizeMetaverse = async () => {
         $store.unityHidden = false;
-        console.log('maximizing');
-        const cursorLockState = await $store.unityInstance.callFunctionWithReturn('UI', 'GetCursorInfo');
-        if (cursorLockState == 'Locked') {
+        if ($store.unityCursorState === UnityCursorModes.Locked) {
             document.getElementById($store.unityInstance.canvasId).requestPointerLock();
         }
     };
@@ -38,9 +35,6 @@
 			$store.unityInstance.addEvent(e, unityEvents[e]);
 		}
 	}
-
-    $: console.log('playerHidden: ', $store.unityHidden);
-
 </script>
 
 <Navbar bind:activeTab title="MetaMall-Shopping Mall in Metaverse" />
@@ -113,7 +107,7 @@
         playerCSS={`metamall-player ${$store.unityHidden ? 'player-hidden' : ''}`}
         bind:this={$store.unityInstance} 
         on:focus={MaximizeMetaverse}
-        on:blur={() => {console.log('blur'); $store.unityHidden = true}}
+        on:blur={() => $store.unityHidden = true}
         on:load={registerUnityEvents}
     />
 </div>
@@ -125,11 +119,25 @@
         width: 100vw;
         height: 100vh;
         z-index: 3;
-        transition: all 0.3s;
+        transition: all 0.5s;
+        animation-fill-mode: forwards;
+        animation: metaverse-show 0.8s;
     }
 
     :global(.player-hidden.metamall-player) {
-        scale: 0;
+        animation: metaverse-hide 0.8s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes metaverse-hide {
+        0%   { opacity: 1; scale: 1; }
+        99%  { opacity: 0; scale: 1; transform: translateY(-100vh); }
+        100% { scale: 0; }
+    }
+    @keyframes metaverse-show {
+        0%   { scale: 0; opacity: 0; transform: translateY(-100vh); }
+        1%   { scale: 1; opacity: 0; transform: translateY(-100vh); }
+        100% { opacity: 1; }
     }
 
     .features-list {
